@@ -41,12 +41,6 @@ CareerLearn AI is a modern web application that provides personalized learning p
 - MetaMask browser extension
 - Google Gemini API key
 
-### Environment Setup
-
-1. Create a `.env` file in the root directory:
-```env
-NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key_here
-```
 
 ### Installation
 
