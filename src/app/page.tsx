@@ -1,12 +1,14 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { WalletButton } from '@/components/WalletButton';
 import { LearningPath } from '@/components/LearningPath';
 import MentorList from '@/components/MentorList';
 import { Brain, BookOpen, GraduationCap, Users, Search, Target, Award, BarChart2, MessageSquare } from 'lucide-react';
 import { HeroVideoDialogDemo } from './../components/HeroVideoDialogDemo';
 import LanguageTranslator from '@/components/language-translator';
+import Preloader from '@/components/Preloader';
+import Footer from '@/components/footer';
 import { motion } from 'framer-motion';
 import EnhancedLearningDashboard from '@/components/EnhancedLearning/EnhancedLearningDashboard';
 
@@ -21,6 +23,7 @@ const CAREER_PATHS = [
 export default function Home() {
   const [selectedPath, setSelectedPath] = useState(CAREER_PATHS[0]);
   const [customPath, setCustomPath] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleCustomPathSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,21 +32,29 @@ export default function Home() {
     }
   };
 
+  const handlePreloaderComplete = () => {
+    setIsLoading(false);
+  };
+
+  if (isLoading) {
+    return <Preloader onComplete={handlePreloaderComplete} />;
+  }
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black text-green-400">
       {/* Header */}
-      <header className="bg-white shadow-sm sticky top-0 z-50">
+      <header className="bg-black border-b border-green-500 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <Brain className="w-8 h-8 text-blue-600" />
-              <h1 className="text-2xl font-bold text-gray-900">eduCareer AI</h1>
+              <Brain className="w-8 h-8 text-green-400 neon-text" />
+              <h1 className="text-2xl font-bold neon-text font-mono">EDUCAREER AI</h1>
             </div>
             <div className="flex items-center gap-4">
               <nav className="flex items-center gap-6">
-                <a href="#about" className="text-gray-600 hover:text-gray-900">About</a>
-                <a href="#services" className="text-gray-600 hover:text-gray-900">Services</a>
-                <a href="#features" className="text-gray-600 hover:text-gray-900">Features</a>
+                <a href="#about" className="text-green-400 hover:text-green-300 font-mono transition-all duration-300 hover:neon-text">ABOUT</a>
+                <a href="#services" className="text-green-400 hover:text-green-300 font-mono transition-all duration-300 hover:neon-text">SERVICES</a>
+                <a href="#features" className="text-green-400 hover:text-green-300 font-mono transition-all duration-300 hover:neon-text">FEATURES</a>
               </nav>
               <LanguageTranslator />
               <WalletButton />
@@ -53,42 +64,66 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-4xl font-bold mb-4">Your AI-Powered Career Journey</h2>
-            <p className="text-xl opacity-90 mb-8">Personalized learning paths tailored to your career goals</p>
+      <section className="bg-gradient-to-r from-black via-gray-900 to-black text-green-400 py-20 relative overflow-hidden">
+        {/* Background gradient */}
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-r from-green-900/20 via-transparent to-green-900/20"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center"
+          >
+            <h2 className="text-6xl font-bold mb-4 neon-text font-mono">YOUR AI-POWERED</h2>
+            <h3 className="text-4xl font-bold mb-6 text-green-300 font-mono">CAREER JOURNEY</h3>
+            <p className="text-xl opacity-90 mb-8 font-mono">PERSONALIZED LEARNING PATHS TAILORED TO YOUR CAREER GOALS</p>
             
             {/* Career Path Generator Form */}
-            <form onSubmit={handleCustomPathSubmit} className="max-w-2xl mx-auto">
-              <div className="flex gap-3 bg-white/10 backdrop-blur-sm p-2 rounded-lg">
+            <motion.form 
+              onSubmit={handleCustomPathSubmit} 
+              className="max-w-2xl mx-auto"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5, duration: 0.5 }}
+            >
+              <div className="flex gap-3 bg-black/50 border border-green-500 backdrop-blur-sm p-2 rounded-lg">
                 <input
                   type="text"
                   value={customPath}
                   onChange={(e) => setCustomPath(e.target.value)}
-                  placeholder="Enter your dream career path..."
-                  className="flex-1 px-4 py-2 rounded-lg bg-white/10 text-white placeholder-white/70 border border-white/20 focus:outline-none focus:ring-2 focus:ring-white/50"
+                  placeholder="ENTER YOUR DREAM CAREER PATH..."
+                  className="flex-1 px-4 py-2 rounded-lg bg-black/70 text-green-400 placeholder-green-600 border border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 font-mono"
                 />
                 <button
                   type="submit"
                   key={customPath}
                   onClick={() => setSelectedPath(customPath)}
-                  className="px-6 py-2 bg-white text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors flex items-center gap-2"
+                  className="px-6 py-2 bg-green-500 text-black rounded-lg font-mono font-bold hover:bg-green-400 transition-all duration-300 flex items-center gap-2 hover:shadow-lg hover:shadow-green-500/50"
                 >
                   <Search className="w-4 h-4" />
-                  Update Prompt
+                  UPDATE_PROMPT
                 </button>
               </div>
-            </form>
-          </div>
-          <div className="flex justify-center item-center mt-8">
-            <HeroVideoDialogDemo />
-          </div>
+            </motion.form>
+          </motion.div>
+          <motion.div 
+            className="flex justify-center item-center mt-8"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+          >
+            <div className="">
+              <HeroVideoDialogDemo />
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-white">
+      <section id="about" className="py-20 bg-black border-t border-green-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -96,22 +131,22 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">About eduCareer AI</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We're revolutionizing career guidance with AI-powered insights and personalized recommendations.
-              Our platform helps you discover your ideal career path and provides the tools you need to succeed.
+            <h2 className="text-4xl font-bold neon-text mb-6 font-mono">ABOUT EDUCAREER AI</h2>
+            <p className="text-xl text-green-300 max-w-3xl mx-auto font-mono leading-relaxed">
+              WE'RE REVOLUTIONIZING CAREER GUIDANCE WITH AI-POWERED INSIGHTS AND PERSONALIZED RECOMMENDATIONS.
+              OUR PLATFORM HELPS YOU DISCOVER YOUR IDEAL CAREER PATH AND PROVIDES THE TOOLS YOU NEED TO SUCCEED.
             </p>
           </motion.div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20">
+      <section id="services" className="py-20 bg-gradient-to-b from-black to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900">Our Services</h2>
-            <p className="text-xl text-gray-600 mt-4">
-              Discover how eduCareer AI can help you achieve your educational and career goals
+            <h2 className="text-4xl font-bold neon-text font-mono">OUR SERVICES</h2>
+            <p className="text-xl text-green-300 mt-4 font-mono">
+              DISCOVER HOW EDUCAREER AI CAN HELP YOU ACHIEVE YOUR EDUCATIONAL AND CAREER GOALS
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -121,15 +156,17 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white p-8 rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+                className="bg-black/70 p-8 rounded-lg border border-green-500 hover:shadow-xl hover:shadow-green-500/20 transition-all duration-300"
               >
-                <div className="flex items-center justify-center w-16 h-16 mx-auto mb-6 rounded-full bg-blue-100">
-                  {service.icon}
+                <div className="flex items-center justify-center w-16 h-16 mx-auto mb-6 rounded-full bg-green-900/30 border border-green-500">
+                  <div className="text-green-400">
+                    {service.icon}
+                  </div>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 text-center mb-4">
+                <h3 className="text-xl font-semibold text-white text-center mb-4">
                   {service.title}
                 </h3>
-                <p className="text-gray-600 text-center">
+                <p className="text-white text-cente">
                   {service.description}
                 </p>
               </motion.div>
@@ -139,11 +176,11 @@ export default function Home() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="bg-white py-20">
+      <section id="features" className="bg-gray-900 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900">Key Features</h2>
-            <p className="text-xl text-gray-600 mt-4">
+            <h2 className="text-3xl font-bold neon-text">Key Features</h2>
+            <p className="text-xl text-green-300 mt-4">
               What makes eduCareer AI unique
             </p>
           </div>
@@ -174,18 +211,18 @@ export default function Home() {
       </section>
 
       {/* Career Path Selection */}
-      <section className="py-20">
+      <section className="py-20 bg-gradient-to-b from-gray-900 to-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold mb-6 text-center">Popular Career Paths</h2>
+          <h2 className="text-3xl font-bold mb-8 text-center neon-text font-mono">POPULAR CAREER PATHS</h2>
           <div className="flex flex-wrap gap-3 justify-center">
             {CAREER_PATHS.map((path) => (
               <button
                 key={path}
                 onClick={() => setSelectedPath(path)}
-                className={`px-6 py-3 rounded-lg transition-colors ${
+                className={`px-6 py-3 rounded-lg transition-all duration-300 border font-mono ${
                   selectedPath === path
-                    ? 'bg-blue-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                    ? 'bg-green-900/30 text-green-400 border-green-500 shadow-lg shadow-green-500/20'
+                    : 'bg-black/50 text-green-300 border-green-700 hover:border-green-500 hover:text-green-400'
                 }`}
               >
                 {path}
@@ -196,7 +233,7 @@ export default function Home() {
       </section>
 
       {/* Learning Path and Mentors */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
@@ -210,7 +247,7 @@ export default function Home() {
       </section>
 
       {/* Enhanced Learning Experience */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gradient-to-b from-black to-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -221,62 +258,65 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
 
 const services = [
   {
-    title: "AI Career Guidance",
-    description: "Get personalized career recommendations based on your skills, interests, and goals.",
-    icon: <Brain className="w-8 h-8 text-blue-600" />,
+    title: "AI CAREER GUIDANCE",
+    description: "GET PERSONALIZED CAREER RECOMMENDATIONS BASED ON YOUR SKILLS, INTERESTS, AND GOALS.",
+    icon: <Brain className="w-8 h-8 text-green-400" />,
   },
   {
-    title: "Educational Resources",
-    description: "Access a comprehensive library of learning materials and courses.",
-    icon: <BookOpen className="w-8 h-8 text-blue-600" />,
+    title: "EDUCATIONAL RESOURCES",
+    description: "ACCESS A COMPREHENSIVE LIBRARY OF LEARNING MATERIALS AND COURSES.",
+    icon: <BookOpen className="w-8 h-8 text-green-400" />,
   },
   {
-    title: "Career Path Planning",
-    description: "Create a detailed roadmap for your professional development.",
-    icon: <Target className="w-8 h-8 text-blue-600" />,
+    title: "CAREER PATH PLANNING",
+    description: "CREATE A DETAILED ROADMAP FOR YOUR PROFESSIONAL DEVELOPMENT.",
+    icon: <Target className="w-8 h-8 text-green-400" />,
   },
   {
-    title: "Skill Assessment",
-    description: "Evaluate your current skills and identify areas for improvement.",
-    icon: <Award className="w-8 h-8 text-blue-600" />,
+    title: "SKILL ASSESSMENT",
+    description: "EVALUATE YOUR CURRENT SKILLS AND IDENTIFY AREAS FOR IMPROVEMENT.",
+    icon: <Award className="w-8 h-8 text-green-400" />,
   },
   {
-    title: "Industry Insights",
-    description: "Stay updated with the latest trends and opportunities in your field.",
-    icon: <BarChart2 className="w-8 h-8 text-blue-600" />,
+    title: "INDUSTRY INSIGHTS",
+    description: "STAY UPDATED WITH THE LATEST TRENDS AND OPPORTUNITIES IN YOUR FIELD.",
+    icon: <BarChart2 className="w-8 h-8 text-green-400" />,
   },
   {
-    title: "Professional Networking",
-    description: "Connect with mentors and peers in your industry.",
-    icon: <Users className="w-8 h-8 text-blue-600" />,
+    title: "PROFESSIONAL NETWORKING",
+    description: "CONNECT WITH MENTORS AND PEERS IN YOUR INDUSTRY.",
+    icon: <Users className="w-8 h-8 text-green-400" />,
   },
 ];
 
 const features = [
   {
-    title: "Personalized Recommendations",
-    description: "Our AI analyzes your profile to provide tailored career and educational suggestions.",
-    icon: <Brain className="w-6 h-6 text-blue-600" />,
+    title: "PERSONALIZED RECOMMENDATIONS",
+    description: "OUR AI ANALYZES YOUR PROFILE TO PROVIDE TAILORED CAREER AND EDUCATIONAL SUGGESTIONS.",
+    icon: <Brain className="w-6 h-6 text-green-400" />,
   },
   {
-    title: "Real-time Updates",
-    description: "Stay informed about new opportunities and industry developments.",
-    icon: <MessageSquare className="w-6 h-6 text-blue-600" />,
+    title: "REAL-TIME UPDATES",
+    description: "STAY INFORMED ABOUT NEW OPPORTUNITIES AND INDUSTRY DEVELOPMENTS.",
+    icon: <MessageSquare className="w-6 h-6 text-green-400" />,
   },
   {
-    title: "Comprehensive Resources",
-    description: "Access a wide range of educational materials and career guidance tools.",
-    icon: <BookOpen className="w-6 h-6 text-blue-600" />,
+    title: "COMPREHENSIVE RESOURCES",
+    description: "ACCESS A WIDE RANGE OF EDUCATIONAL MATERIALS AND CAREER GUIDANCE TOOLS.",
+    icon: <BookOpen className="w-6 h-6 text-green-400" />,
   },
   {
-    title: "Career Path Visualization",
-    description: "Visualize your potential career paths and required steps to achieve your goals.",
-    icon: <Target className="w-6 h-6 text-blue-600" />,
+    title: "CAREER PATH VISUALIZATION",
+    description: "VISUALIZE YOUR POTENTIAL CAREER PATHS AND REQUIRED STEPS TO ACHIEVE YOUR GOALS.",
+    icon: <Target className="w-6 h-6 text-green-400" />,
   },
 ];

@@ -6,10 +6,29 @@
   z-index: 1000;
 }
 
+.translateDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.translateDropdownVisible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.translateDropdownHidden {
+  opacity: 0;
+  visibility: hidden;
+}
+
 .languageButton {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
+  border: 1px solid rgba(57, 255, 20, 0.5);
+  color: #39FF14;
   padding: 0.5rem;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -17,8 +36,34 @@
 }
 
 .languageButton:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(57, 255, 20, 0.1);
+  border-color: #39FF14;
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.3);
+}
+
+/* Component positioning */
+.translatorContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.translateDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 0.5rem;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+.dropdownOpen {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dropdownClosed {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .languageName {
@@ -26,16 +71,194 @@
   top: -1.5rem;
   right: 0;
   font-size: 0.75rem;
-  color: hsl(var(--muted-foreground));
+  color: #39FF14;
   white-space: nowrap;
+  opacity: 0.8;
 }
 
 .menuContent {
-  background: #1a1a1a;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.5rem;
-  padding: 0.5rem;
+  background: #000000;
+  border: 1px solid #39FF14;
+  border-radius: 0.75rem;
+  padding: 0.75rem;
   min-width: 200px;
+  box-shadow: 0 0 20px rgba(57, 255, 20, 0.2);
+}
+
+/* Hide all Google Translate UI elements */
+.goog-te-banner-frame,
+.goog-te-balloon-frame,
+.goog-te-gadget-icon,
+.goog-te-gadget-simple img,
+.goog-te-gadget-simple .goog-te-gadget-icon,
+.goog-te-gadget-simple .goog-te-gadget-icon img,
+.VIpgJd-ZVi9od-xl07Ob-lTBxed {
+  display: none !important;
+}
+
+/* Google Translate Element Styling */
+.goog-te-gadget-simple {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  font-size: 0 !important;
+  z-index: 1000 !important;
+  position: relative !important;
+}
+
+.goog-te-gadget-simple a {
+  color: #39FF14 !important;
+  text-decoration: none !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  padding: 0.75rem 1.25rem !important;
+  border-radius: 0.75rem !important;
+  background: rgba(57, 255, 20, 0.05) !important;
+  border: 1px solid rgba(57, 255, 20, 0.3) !important;
+  transition: all 0.2s ease !important;
+  font-size: 0.875rem !important;
+  min-width: 140px !important;
+  justify-content: center !important;
+  backdrop-filter: blur(8px) !important;
+  box-shadow: 0 2px 4px rgba(57, 255, 20, 0.1) !important;
+  z-index: 1000 !important;
+  position: relative !important;
+  font-family: 'Courier New', monospace !important;
+}
+
+.goog-te-gadget-simple a:hover {
+  background: rgba(57, 255, 20, 0.1) !important;
+  border-color: #39FF14 !important;
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.3) !important;
+  text-shadow: 0 0 5px #39FF14 !important;
+}
+
+/* Hide the language selector arrow */
+.goog-te-gadget-simple a span:last-child {
+  display: none !important;
+}
+
+/* Style the select element */
+.goog-te-combo {
+  background: #000000 !important;
+  border: 1px solid #39FF14 !important;
+  color: #39FF14 !important;
+  padding: 0.5rem !important;
+  font-size: 0.875rem !important;
+  cursor: pointer !important;
+  outline: none !important;
+  border-radius: 0.5rem !important;
+  font-family: 'Courier New', monospace !important;
+  box-shadow: 0 0 5px rgba(57, 255, 20, 0.2) !important;
+}
+
+.goog-te-combo:hover {
+  border-color: #39FF14 !important;
+  box-shadow: 0 0 10px rgba(57, 255, 20, 0.3) !important;
+}
+
+/* Style the select options */
+.goog-te-combo option {
+  background: #000000 !important;
+  color: #39FF14 !important;
+  padding: 0.5rem !important;
+  border: none !important;
+}
+
+.goog-te-combo option:hover {
+  background: rgba(57, 255, 20, 0.1) !important;
+}
+
+.goog-te-menu-value {
+  color: #39FF14 !important;
+  font-family: 'Courier New', monospace !important;
+}
+
+.goog-te-menu-value span {
+  color: #39FF14 !important;
+}
+
+.goog-te-menu-value:hover {
+  text-decoration: none !important;
+  text-shadow: 0 0 5px #39FF14 !important;
+}
+
+/* Dropdown menu styling */
+.goog-te-menu2 {
+  background: rgba(0, 0, 0, 0.95) !important;
+  border: 1px solid #39FF14 !important;
+  border-radius: 0.75rem !important;
+  padding: 0.75rem !important;
+  min-width: 200px !important;
+  max-height: 400px !important;
+  overflow-y: auto !important;
+  backdrop-filter: blur(8px) !important;
+  box-shadow: 0 4px 6px rgba(57, 255, 20, 0.2), 0 0 20px rgba(57, 255, 20, 0.1) !important;
+  z-index: 1000 !important;
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  margin-top: 0.5rem !important;
+}
+
+.goog-te-menu2-item {
+  color: #39FF14 !important;
+  padding: 0.75rem !important;
+  cursor: pointer !important;
+  border-radius: 0.5rem !important;
+  font-size: 0.875rem !important;
+  transition: all 0.2s ease !important;
+  font-family: 'Courier New', monospace !important;
+}
+
+.goog-te-menu2-item:hover {
+  background: rgba(57, 255, 20, 0.1) !important;
+  text-shadow: 0 0 3px #39FF14 !important;
+}
+
+.goog-te-menu2-item div {
+  color: #39FF14 !important;
+}
+
+.goog-te-menu2-item-selected {
+  background: rgba(57, 255, 20, 0.15) !important;
+  font-weight: 500 !important;
+  box-shadow: 0 0 5px rgba(57, 255, 20, 0.3) !important;
+}
+
+/* Custom scrollbar for the dropdown */
+.goog-te-menu2::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+.goog-te-menu2::-webkit-scrollbar-track {
+  background: rgba(57, 255, 20, 0.1) !important;
+  border-radius: 3px !important;
+}
+
+.goog-te-menu2::-webkit-scrollbar-thumb {
+  background: rgba(57, 255, 20, 0.5) !important;
+  border-radius: 3px !important;
+}
+
+.goog-te-menu2::-webkit-scrollbar-thumb:hover {
+  background: rgba(57, 255, 20, 0.7) !important;
+}
+
+/* Hide the Google Translate banner completely */
+body > .goog-te-banner-frame {
+  display: none !important;
+  height: 0 !important;
+  visibility: hidden !important;
+}
+
+/* Hide the Google Translate iframe */
+.goog-te-banner-frame iframe {
+  display: none !important;
+  height: 0 !important;
+  visibility: hidden !important;
 }
 
 /* Hide all Google Translate UI elements */

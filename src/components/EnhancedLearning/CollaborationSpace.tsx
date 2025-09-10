@@ -226,7 +226,7 @@ const CollaborationSpace: React.FC = () => {
       <div className="flex flex-col gap-4">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-bold">Collaboration Space</h2>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 bg-black">
             {users.map(user => (
               <div 
                 key={user.id} 
@@ -265,11 +265,11 @@ const CollaborationSpace: React.FC = () => {
                     <span className="text-xs text-gray-500">{msg.timestamp}</span>
                   </div>
                   {msg.type === 'code' ? (
-                    <pre className="mt-1 p-2 bg-gray-100 rounded-lg whitespace-pre-wrap font-mono text-sm">
+                    <pre className="mt-1 p-2 bg-black rounded-lg whitespace-pre-wrap font-mono text-sm">
                       {msg.content}
                     </pre>
                   ) : (
-                    <p className="mt-1 p-2 bg-white rounded-lg max-w-[80%]">
+                    <p className="mt-1 p-2 bg-black rounded-lg max-w-[80%]">
                       {msg.content}
                     </p>
                   )}
@@ -293,7 +293,7 @@ const CollaborationSpace: React.FC = () => {
           </div>
 
           {/* Code Editor */}
-          <div className="w-1/2 bg-gray-50 rounded-lg p-4">
+          <div className="w-1/2 bg-gray-50 rounded-lg p-4 text-black">
             <h3 className="font-semibold mb-2">Shared Code Editor</h3>
             <div className="h-full bg-white rounded-lg p-4 font-mono text-sm">
               <pre className="whitespace-pre-wrap">

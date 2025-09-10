@@ -6,14 +6,14 @@ export function HeroVideoDialogDemo() {
       <HeroVideoDialog
         className="dark:hidden block"
         animationStyle="from-center"
-        videoSrc="https://www.youtube.com/embed/TW95TBJdOmo"
-        thumbnailSrc="https://i.ibb.co/MP5cq1z/Get-Started-With-Tippy.png"
+        videoSrc="https://www.youtube.com/embed/r89cHhx0C38"
+        thumbnailSrc="/images/header.png"
         thumbnailAlt="Hero Video"
       />
       <HeroVideoDialog
         className="hidden dark:block"
         animationStyle="from-center"
-        videoSrc="https://www.youtube.com/embed/TW95TBJdOmo"
+        videoSrc="https://www.youtube.com/embed/r89cHhx0C38"
         thumbnailSrc="https://i.ibb.co/MP5cq1z/Get-Started-With-Tippy.png"
         thumbnailAlt="Hero Video"
       />

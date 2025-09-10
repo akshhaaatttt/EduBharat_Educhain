@@ -44,7 +44,7 @@ const MOCK_MENTORS: Mentor[] = [
     company: "Google",
     rate: 0.0002,
     availability: "Available",
-    walletAddress: "0x9A6CE52f61E8d2d999Ee495eA719BEd74Caa9402",
+    walletAddress: "0xa53075634220761e7aAc7018ed5803B18E89b452",
     image: "https://raw.githubusercontent.com/akshhaaatttt/cdns/main/uploads/pic.png",
   },
   {
@@ -54,17 +54,17 @@ const MOCK_MENTORS: Mentor[] = [
     company: "Microsoft",
     rate: 0.0002,
     availability: "Available",
-    walletAddress: "0x9A6CE52f61E8d2d999Ee495eA719BEd74Caa9402",
+    walletAddress: "0xa53075634220761e7aAc7018ed5803B18E89b452",
     image: "https://raw.githubusercontent.com/akshhaaatttt/cdns/main/uploads/WhatsApp%20Image%202025-04-27%20at%2005.05.08_09bfa75b.jpg",
   },
   {
     id: 3,
-    name: "Vishal Singh Songara",
+    name: "Vishal Singh",
     role: "Data Scientist",
     company: "Amazon",
     rate: 0.0002,
     availability: "Available",
-    walletAddress: "0x9A6CE52f61E8d2d999Ee495eA719BEd74Caa9402",
+    walletAddress: "0xa53075634220761e7aAc7018ed5803B18E89b452",
     image: "https://avatars.githubusercontent.com/u/117855423?v=4",
   },
 ];
@@ -235,12 +235,12 @@ export default function MentorList({ careerPath }: { careerPath: string }) {
   }, []);
 
   return (
-    <div className="w-full max-w-4xl mx-auto bg-white rounded-xl shadow-lg">
+    <div className="w-full max-w-4xl mx-auto bg-black border border-white rounded-xl shadow-lg">
       {/* Header */}
-      <div className="flex items-center justify-between p-6 border-b">
+      <div className="flex items-center justify-between p-6 border-b border-white">
         <div className="flex items-center gap-2">
-          <Users className="h-6 w-6 text-blue-600" />
-          <h2 className="text-xl font-bold">Available Mentors</h2>
+          <Users className="h-6 w-6 text-[#39FF14]" />
+          <h2 className="text-xl font-bold text-white">Available Mentors</h2>
         </div>
         <button
           onClick={connectWallet}
@@ -249,7 +249,7 @@ export default function MentorList({ careerPath }: { careerPath: string }) {
           }`}
         >
           <Wallet className="h-4 w-4" />
-          {isConnected ? <span>{`${address.slice(0, 6)}...${address.slice(-4)}`}</span> : "Connect Wallet"}
+          {isConnected ? <span className="text-white">{`${address.slice(0, 6)}...${address.slice(-4)}`}</span> : "Connect Wallet"}
         </button>
       </div>
 
@@ -258,27 +258,27 @@ export default function MentorList({ careerPath }: { careerPath: string }) {
         {mentors.map((mentor) => (
           <div
             key={mentor.id}
-            className="flex items-start gap-4 rounded-lg border p-4 transition-colors hover:border-blue-100"
+            className="flex items-start gap-4 rounded-lg border border-white p-4 transition-colors hover:border-[#39FF14] bg-black"
           >
             <img src={mentor.image || "/placeholder.svg"} alt={mentor.name} className="h-12 w-12 rounded-full" />
             <div className="flex-1 space-y-1">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-semibold">{mentor.name}</h3>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="font-semibold text-white">{mentor.name}</h3>
+                  <p className="text-sm text-gray-300">
                     {mentor.role} at {mentor.company}
                   </p>
                 </div>
                 <span
                   className={`px-2 py-1 text-sm rounded-full ${
-                    mentor.availability === "Available" ? "bg-green-100 text-green-800" : "bg-gray-100 text-gray-800"
+                    mentor.availability === "Available" ? "bg-green-900 text-green-300 border border-green-500" : "bg-gray-800 text-gray-300 border border-gray-600"
                   }`}
                 >
                   {mentor.availability}
                 </span>
               </div>
               <div className="flex items-center justify-between pt-2">
-                <span className="text-sm font-medium">{mentor.rate} EDU/hour</span>
+                <span className="text-sm font-medium text-white">{mentor.rate} EDU/hour</span>
                 <button
                   onClick={() => setSelectedMentor(mentor)}
                   disabled={mentor.availability !== "Available"}
@@ -296,41 +296,41 @@ export default function MentorList({ careerPath }: { careerPath: string }) {
       {/* Payment Modal */}
       {selectedMentor && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-lg max-w-md w-full p-6">
-            <h3 className="text-xl font-bold mb-4">Confirm Booking</h3>
-            <p className="text-gray-600 mb-6">You're about to book a mentoring session</p>
+          <div className="bg-black border border-white rounded-xl shadow-lg max-w-md w-full p-6">
+            <h3 className="text-xl font-bold mb-4 text-white">Confirm Booking</h3>
+            <p className="text-gray-300 mb-6">You're about to book a mentoring session</p>
 
             <div className="space-y-4">
-              <div className="flex items-center gap-4 rounded-lg border p-4">
+              <div className="flex items-center gap-4 rounded-lg border border-white p-4">
                 <img
                   src={selectedMentor.image || "/placeholder.svg"}
                   alt={selectedMentor.name}
                   className="h-12 w-12 rounded-full"
                 />
                 <div>
-                  <h3 className="font-semibold">{selectedMentor.name}</h3>
-                  <p className="text-sm text-gray-600">
+                  <h3 className="font-semibold text-white">{selectedMentor.name}</h3>
+                  <p className="text-sm text-gray-300">
                     {selectedMentor.role} at {selectedMentor.company}
                   </p>
                 </div>
               </div>
 
-              <div className="rounded-lg border p-4">
+              <div className="rounded-lg border border-white p-4">
                 <div className="flex justify-between text-sm">
-                  <span>Session Rate</span>
-                  <span className="font-medium">{selectedMentor.rate} EDU</span>
+                  <span className="text-white">Session Rate</span>
+                  <span className="font-medium text-white">{selectedMentor.rate} EDU</span>
                 </div>
               </div>
 
               {txHash && (
-                <div className="rounded-lg bg-blue-50 p-4 text-sm">
+                <div className="rounded-lg bg-gray-900 border border-[#39FF14] p-4 text-sm">
                   <div className="flex items-center gap-2">
-                    <span>Transaction submitted:</span>
+                    <span className="text-white">Transaction submitted:</span>
                     <a
                       href={`${EDUCHAIN_CONFIG.blockExplorerUrls[0]}/tx/${txHash}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-blue-600 hover:underline"
+                      className="flex items-center gap-1 text-[#39FF14] hover:underline"
                     >
                       View on Explorer
                       <ExternalLink className="h-3 w-3" />
@@ -343,14 +343,14 @@ export default function MentorList({ careerPath }: { careerPath: string }) {
                 <button
                   onClick={() => setSelectedMentor(null)}
                   disabled={isPaying}
-                  className="px-4 py-2 rounded-lg border hover:bg-gray-50 disabled:opacity-50"
+                  className="px-4 py-2 rounded-lg border border-white text-white hover:bg-gray-800 disabled:opacity-50"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handlePayment}
                   disabled={isPaying}
-                  className="min-w-[100px] px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="min-w-[100px] px-4 py-2 rounded-lg bg-[#39FF14] text-black hover:bg-[#39FF14]/80 disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   {isPaying ? (
                     <>
@@ -370,20 +370,20 @@ export default function MentorList({ careerPath }: { careerPath: string }) {
       {/* Toast Notification */}
       {showToast && (
         <div
-          className={`fixed bottom-4 right-4 max-w-md w-full rounded-lg shadow-lg p-4 transition-all transform translate-y-0 ${
-            toastMessage.type === "success" ? "bg-green-50" : "bg-red-50"
+          className={`fixed bottom-4 right-4 max-w-md w-full rounded-lg shadow-lg p-4 transition-all transform translate-y-0 border ${
+            toastMessage.type === "success" ? "bg-green-900 border-green-500" : "bg-red-900 border-red-500"
           }`}
         >
           <div className="flex gap-2">
             <div className="flex-1">
-              <h4 className={`font-medium ${toastMessage.type === "success" ? "text-green-800" : "text-red-800"}`}>
+              <h4 className={`font-medium ${toastMessage.type === "success" ? "text-green-300" : "text-red-300"}`}>
                 {toastMessage.title}
               </h4>
-              <p className={toastMessage.type === "success" ? "text-green-600" : "text-red-600"}>
+              <p className={toastMessage.type === "success" ? "text-green-200" : "text-red-200"}>
                 {toastMessage.message}
               </p>
             </div>
-            <button onClick={() => setShowToast(false)} className="text-gray-500 hover:text-gray-700">
+            <button onClick={() => setShowToast(false)} className="text-gray-400 hover:text-gray-200">
               ×
             </button>
           </div>

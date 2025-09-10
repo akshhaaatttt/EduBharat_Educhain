@@ -39,7 +39,9 @@ const CodeReview: React.FC<CodeReviewProps> = ({ code: initialCode = '' }) => {
     fetchAvailableModels();
   }, []);
 
-  const analyzeCode = async () => {
+  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+  const analyzeCode = async (retries = 3) => {
     if (!code.trim()) {
       setError('Please enter some code to analyze');
       return;
@@ -49,24 +51,25 @@ const CodeReview: React.FC<CodeReviewProps> = ({ code: initialCode = '' }) => {
     setError('');
     setReview('');
 
-    try {
-      const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-      if (!apiKey) {
-        throw new Error('API key is not configured. Please check your environment variables.');
-      }
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+        if (!apiKey) {
+          throw new Error('API key is not configured. Please check your environment variables.');
+        }
 
-      // Use gemini-1.5-flash model
-      const modelName = 'models/gemini-1.5-flash';
+        // Use gemini-1.5-flash model for better quota limits
+        const modelName = 'models/gemini-1.5-flash';
 
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1/${modelName}:generateContent?key=${apiKey}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [{
-            parts: [{
-              text: `Please review the following code and provide detailed feedback on:
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1/${modelName}:generateContent?key=${apiKey}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{
+                text: `Please review the following code and provide detailed feedback on:
 1. Code quality and best practices
 2. Potential bugs or issues
 3. Performance considerations
@@ -79,29 +82,95 @@ ${code}
 \`\`\`
 
 Please provide a comprehensive review in a structured format.`
+              }]
             }]
-          }]
-        })
-      });
+          })
+        });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error?.message || 'Failed to analyze code');
+        if (!response.ok) {
+          const errorData = await response.json();
+          
+          // Check if it's a quota/rate limit error
+          if (response.status === 429 || errorData.error?.message?.includes('quota') || errorData.error?.message?.includes('rate limit')) {
+            if (attempt === retries) {
+              // If this is the last attempt, provide fallback content
+              setReview(getFallbackCodeReview());
+              return;
+            }
+            
+            // Wait before retrying (exponential backoff)
+            const waitTime = Math.min(1000 * Math.pow(2, attempt - 1), 10000);
+            console.log(`Rate limited. Waiting ${waitTime}ms before retry...`);
+            await sleep(waitTime);
+            continue;
+          }
+          
+          throw new Error(errorData.error?.message || 'Failed to analyze code');
+        }
+
+        const data = await response.json();
+        if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
+          throw new Error('Invalid response format from API');
+        }
+
+        const reviewText = data.candidates[0].content.parts[0].text;
+        setReview(reviewText);
+        return;
+      } catch (err: any) {
+        console.error(`Code analysis attempt ${attempt} failed:`, err);
+        
+        // Check if it's a quota/rate limit error
+        if (err?.message?.includes('429') || err?.message?.includes('quota') || err?.message?.includes('rate limit')) {
+          if (attempt === retries) {
+            // If this is the last attempt, provide fallback content
+            setReview(getFallbackCodeReview());
+            return;
+          }
+          
+          // Wait before retrying (exponential backoff)
+          const waitTime = Math.min(1000 * Math.pow(2, attempt - 1), 10000);
+          console.log(`Rate limited. Waiting ${waitTime}ms before retry...`);
+          await sleep(waitTime);
+          continue;
+        }
+        
+        // For other errors, throw immediately if this is the last attempt
+        if (attempt === retries) {
+          setError(err instanceof Error ? err.message : 'Error analyzing code. Please try again.');
+        }
       }
-
-      const data = await response.json();
-      if (!data.candidates?.[0]?.content?.parts?.[0]?.text) {
-        throw new Error('Invalid response format from API');
-      }
-
-      const reviewText = data.candidates[0].content.parts[0].text;
-      setReview(reviewText);
-    } catch (err) {
-      console.error('Code analysis error:', err);
-      setError(err instanceof Error ? err.message : 'Error analyzing code. Please try again.');
-    } finally {
-      setIsLoading(false);
     }
+    
+    setIsLoading(false);
+  };
+
+  const getFallbackCodeReview = (): string => {
+    return `# Code Review (Fallback Analysis)
+
+## General Observations
+Your code has been submitted for review. While we cannot provide AI-powered analysis at the moment due to quota limits, here are some general guidelines to consider:
+
+## Code Quality Checklist
+✓ **Readability**: Ensure your code is well-formatted and uses meaningful variable names
+✓ **Comments**: Add comments for complex logic and functions
+✓ **Error Handling**: Implement proper error handling with try-catch blocks
+✓ **Performance**: Look for opportunities to optimize loops and data structures
+✓ **Security**: Validate inputs and sanitize user data
+
+## Best Practices
+- Follow consistent coding conventions
+- Keep functions small and focused
+- Use appropriate data types
+- Implement proper logging
+- Write unit tests for critical functions
+
+## Next Steps
+1. Review your code against the checklist above
+2. Test your code thoroughly
+3. Consider peer review
+4. Try the AI analysis again later
+
+*Note: This is a fallback response due to API quota limits. Please try again later for AI-powered analysis.*`;
   };
 
   return (
@@ -124,7 +193,7 @@ Please provide a comprehensive review in a structured format.`
               className="min-h-[300px] font-mono"
             />
             <Button 
-              onClick={analyzeCode} 
+              onClick={() => analyzeCode()} 
               disabled={isLoading}
               className="w-full"
             >
